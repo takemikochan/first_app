@@ -1,92 +1,94 @@
-# Flask API with Blueprint
+# 🐍 Flask API Project – first_app
 
-このプロジェクトは、Flaskを使ってシンプルなAPIを構築するサンプルアプリです。  
-Blueprintを使用して、アプリの構成に拡張性を持たせた設計をしています。
+GitHub Actions + VPSデプロイで動作する小規模なFlask APIアプリです。  
+Blueprint構成、CI/CD、HTTPS化、セキュリティ強化まで対応済みです。
 
-## 概要
+---
 
-- `/api/greet?name=YOUR_NAME` にアクセスすると、指定した名前を使って挨拶を返すAPIを実装
-- Flask + Blueprint による拡張性のある構成
-- 本番環境では Gunicorn + Nginx によるデプロイを想定
+## 🌐 デモ（公開中）
 
-## セットアップ手順
+```
+https://takemiko.com/api/greet?name=みこと
+```
 
-### 必要な環境
+レスポンス例：
 
-- Python 3.8 以上
-- pip（Pythonパッケージマネージャ）
+```json
+{ "message": "こんにちは, みこと!" }
+```
 
-### 仮想環境の作成
+---
+
+## 📁 ディレクトリ構成
+
+```
+first_app/
+├── app.py                         # Flaskアプリ本体
+├── routes/                        # Blueprintルート格納先
+│   ├── __init__.py                # Blueprint登録関数
+│   └── greet.py                   # /api/greet エンドポイント
+├── tests/                         # ユニットテスト
+│   └── test_greet.py
+├── .github/
+│   └── workflows/
+│       ├── python-ci.yml          # CI用（pytest）
+│       └── deploy.yml             # CD用（SSHでVPSに自動デプロイ）
+├── requirements.txt
+└── README.md
+```
+
+---
+
+## 🚀 起動方法（ローカル）
 
 ```bash
 python -m venv venv
-```
-
-### 仮想環境の有効化
-
-- Windows:
-  ```bash
-  .\venv\Scripts\activate
-  ```
-
-- Mac/Linux:
-  ```bash
-  source venv/bin/activate
-  ```
-
-### パッケージのインストール
-
-```bash
+source venv/bin/activate  # Windowsは venv\Scripts\activate
 pip install -r requirements.txt
-```
-
-## 起動方法
-
-### 開発用サーバー
-
-```bash
 python app.py
 ```
 
-### WSGIサーバー（Linux環境）
+または Gunicornで起動：
 
 ```bash
 gunicorn --bind 127.0.0.1:8000 app:app
 ```
 
-> ⚠️ Windows環境では gunicorn は利用できません。VPS上で使用します。
+---
 
-## エンドポイント
+## 🧪 テスト
 
-### GET `/api/greet`
-
-- クエリパラメータ: `name`（例: `?name=みこと`）
-- レスポンス例：
-
-```json
-{
-  "message": "こんにちは, みこと!"
-}
+```bash
+pytest
 ```
 
-## ディレクトリ構成（抜粋）
+---
 
-```
-first_app/
-├── app.py                  # アプリのエントリポイント
-├── routes/                 # ルーティングを定義したBlueprintモジュール
-│   ├── __init__.py         # Blueprint登録と構成用
-│   └── greet.py            # `/api/greet` のルーティング処理
-├── requirements.txt
-├── README.md
-└── ...
-```
+## 🔐 セキュリティ
 
-## 開発者
+- **HTTPS（Let's Encrypt） + HSTS**
 
-- **名前**: みことちゃん
-- **GitHub**: [https://github.com/takemikochan](https://github.com/takemikochan)
+---
 
-## ライセンス
+## 🛠️ GitHub ActionsによるCI/CD
 
-このプロジェクトは [MIT License](LICENSE) のもとで公開されています。
+- Push/PRで `pytest` 自動実行（`python-ci.yml`）
+- `main`ブランチマージでVPSに自動デプロイ（`deploy.yml`）
+- VPS上では `systemctl restart` によりアプリ再起動
+
+---
+
+## 🔗 使用サービス・技術
+
+- Flask 3.x
+- Gunicorn
+- Nginx（Reverse Proxy）
+- GitHub Actions（CI/CD）
+- Xserver VPS
+- Let's Encrypt（HTTPS証明書）
+
+---
+
+## 📜 ライセンス
+
+MIT License
